@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuestUs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #0a0a16 0%, #121225 50%, #0d0d1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Stars background */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Title container with enhanced mirror reflection */
+        .title-container {
+            position: relative;
+            margin-bottom: 2rem;
+            perspective: 1000px;
+        }
+
+        /* Main title */
+        .logo {
+            font-size: 8rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+            will-change: transform;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        /* Colors for Q and QuestUs */
+        .logo-q {
+            color: #6495ed;
+            text-shadow: 0 0 15px rgba(100, 149, 237, 0.8);
+        }
+
+        .logo-us {
+            color: #9370db;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.6);
+        }
+
+        /* Water reflection effect */
+        .logo-reflection {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scaleY(-1);
+            transform-origin: top;
+            opacity: 0.5;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 70%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(1px);
+            z-index: 2;
+        }
+
+        /* Explore button */
+        .explore-btn {
+            background: rgba(25, 25, 50, 0.3);
+            color: white;
+            border: 2px solid rgba(100, 149, 237, 0.4);
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-top: 2rem;
+            z-index: 3;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .explore-btn:hover {
+            background: rgba(100, 149, 237, 0.2);
+            border-color: #6495ed;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .explore-btn:active {
+            transform: translateY(1px);
+        }
+
+        .explore-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .explore-btn:hover::after {
+            left: 100%;
+        }
+
+        .subtitle {
+            color: rgba(200, 200, 255, 0.85);
+            font-size: 1.5rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+            z-index: 3;
+            position: relative;
+            text-shadow: 0 0 5px rgba(100, 149, 237, 0.3);
+        }
+
+        .highlight {
+            color: #6495ed;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .explore-btn {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars background -->
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="title-container">
+            <h1 class="logo">
+                <span class="logo-q">Q</span><span class="logo-us">uestUs</span>
+            </h1>
+            <div class="logo-reflection">
+                <span class="logo-q">Q</span><span class="logo-us">uestUs</span>
+            </div>
+        </div>
+        
+        <p class="subtitle">一个<span class="highlight">现代化平台</span>，用于构建和分享创新解决方案</p>
+        
+        <!-- Modified button to navigate to explore page -->
+        <button class="explore-btn" id="exploreBtn">开始探索</button>
+    </div>
+
+    <script>
+        // Create stars for background
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 300;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                // Random size (0.5px to 3px)
+                const size = 0.5 + Math.random() * 2.5;
+                
+                // Random animation duration (2s to 7s)
+                const duration = 2 + Math.random() * 5;
+                
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${duration}s`);
+                
+                // Randomize initial opacity
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Add mouse move effect for the logo
+            const logo = document.querySelector('.logo');
+            document.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+                logo.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            
+            // Reset rotation when mouse leaves
+            document.addEventListener('mouseleave', () => {
+                logo.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+            
+            // Button click effect - navigate to explore page
+            const exploreBtn = document.getElementById('exploreBtn');
+            exploreBtn.addEventListener('click', function() {
+                this.textContent = '加载中...';
+                setTimeout(() => {
+                    window.location.href = '/explore';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

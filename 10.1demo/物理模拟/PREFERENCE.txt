@@ -1,0 +1,4 @@
+In this project, I will use c++ to simulate the physics of a pendulum.
+
+That must be very interesting.
+
